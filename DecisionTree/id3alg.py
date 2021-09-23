@@ -1,4 +1,5 @@
 import math
+import sys
 
 
 class DecisionNode:
@@ -17,6 +18,7 @@ class DecisionNode:
 def most_common_label(examples):
     dict_of_labels = labels_count(examples)
     highest_count = 0
+    highest_label = None
     for label in dict_of_labels:
         if dict_of_labels[label] >= highest_count:
             highest_count = dict_of_labels[label]
@@ -40,7 +42,7 @@ def delete_examples(examples, att_val, attribute):
     return new_examples
 
 
-def id3(prev_node_examples, node_examples, full_attributes, remain_attributes, max_size):
+def id3(prev_node_examples, node_examples, full_attributes, remain_attributes, max_size, gain_type):
     #print(full_attributes)
     #print("remain attributes:")
     #print(remain_attributes)
@@ -70,6 +72,8 @@ def id3(prev_node_examples, node_examples, full_attributes, remain_attributes, m
         # they're all the same, so I will make the first examples label the label for the leaf node
         node['label'] = most_common_label(node_examples)
         return node
+
+    # Limit the size of the tree to the max size
     if max_size is not None:
         if (len(full_attributes) - len(remain_attributes)) == max_size:
             node['subnodes'] = 'leaf'
@@ -78,7 +82,15 @@ def id3(prev_node_examples, node_examples, full_attributes, remain_attributes, m
             return node
 
     # Need to find the attribute that will best split the data out of all the remaining attributes
-    best_attribute, best_gain = highest_info_gain_entropy(node_examples, remain_attributes)
+    if gain_type == 'entropy':
+        best_attribute, best_gain = highest_info_gain_entropy(node_examples, remain_attributes)
+    elif gain_type == 'me':
+        best_attribute, best_gain = highest_info_gain_me(node_examples, remain_attributes)
+    elif gain_type == 'gini':
+        best_attribute, best_gain = highest_info_gain_gini(node_examples, remain_attributes)
+    else:
+        sys.exit("You entered an incorrect string for gain_type.")
+
     # Now know the attribute for the next split, so this can be saved along with the gain
     node['attribute'] = best_attribute
     node['subnodes'] = {}
@@ -91,14 +103,9 @@ def id3(prev_node_examples, node_examples, full_attributes, remain_attributes, m
         # need to delete any examples that don't fit this attribute value
         new_node_examples = delete_examples(node_examples, attribute_val, best_attribute)
         new_prev_node_examples = [x[:] for x in node_examples]
-        node['subnodes'][attribute_val] = id3(new_prev_node_examples, new_node_examples, full_attributes, new_remain_attributes, max_size)
+        node['subnodes'][attribute_val] = id3(new_prev_node_examples, new_node_examples, full_attributes, new_remain_attributes, max_size, gain_type)
 
     return node
-
-
-
-
-
 
 
 # Function returns a dictionary where the keys are the attributes as numbers 0 to attribute count.
@@ -112,6 +119,7 @@ def get_attributes(examples):
                 dict_of_attributes[j].append(examples[i][j])
     return dict_of_attributes
 
+
 def labels_count(examples):
     # Creating a dictionary to hold each label and associated count
     dict_of_labels = {}
@@ -123,6 +131,7 @@ def labels_count(examples):
         else:
             dict_of_labels[examples[i][-1]] = 1
     return dict_of_labels
+
 
 # Function that calculates the entropy of a given a set of examples. This function only
 #   uses the final column of the array, which holds the label
@@ -137,7 +146,90 @@ def entropy_calc(examples):
     return entropy
 
 
-# function returns the highest information gain using entropy method. Using all the given examples and all the given
+# Function that calculates the majority error of a given a set of examples. This function only
+#   uses the final column of the array, which holds the label
+def majority_error_calc(examples):
+    # find the most common label
+    label_most = most_common_label(examples)
+    if label_most is None:
+        return 0
+    # get counts for every label in dictionary
+    label_dict = labels_count(examples)
+    # calculate the majority error
+    maj_err = (len(examples) - label_dict[label_most])/float(len(examples))
+    # return
+    return maj_err
+
+
+# Function that calculates the gini index of a given a set of examples. This function only
+#   uses the final column of the array, which holds the label
+def gini_index_calc(examples):
+    # get dictionary of labels
+    dict_of_labels = labels_count(examples)
+
+    # Calculating the gini index of the set by iterating through the dictionary adding up probability contributions
+    gi_sum = 0
+    for key in dict_of_labels.keys():
+        gi_sum = gi_sum + pow(float(dict_of_labels[key]) / len(examples), 2)
+    gi = 1 - gi_sum
+    return gi
+
+
+# Function returns the highest information gain using ME method. Using all the given examples and all the given
+#   attributes to determine which attribute splits the best
+def highest_info_gain_gini(examples, attributes):
+    # ME of the set of examples
+    set_gi = gini_index_calc(examples)
+    # dictionary holding all the information gain values
+    information_gains = {}
+    # highest information gain of the given attributes
+    highest_info_gain = 0
+    # iterating through each attribute provided
+    for key in attributes.keys():
+        # info gain for specific attribute value
+        info_gain_sum = 0
+        # split the example by attribute value
+        sub_examples = attribute_split(examples, key, attributes)
+        # iterating through every row (corresponding to an attribute value) of sub_examples to get contribution to gain
+        for row in sub_examples:
+            info_gain_sum = info_gain_sum + float(len(sub_examples[row])) / len(examples) * gini_index_calc(
+                sub_examples[row])
+        # Calculating the total information gain
+        information_gains[key] = set_gi - info_gain_sum
+        if information_gains[key] >= highest_info_gain:
+            highest_info_gain_key = key
+            highest_info_gain = information_gains[key]
+    return highest_info_gain_key, highest_info_gain
+
+
+# Function returns the highest information gain using ME method. Using all the given examples and all the given
+#   attributes to determine which attribute splits the best
+def highest_info_gain_me(examples, attributes):
+    # ME of the set of examples
+    set_me = majority_error_calc(examples)
+    # dictionary holding all the information gain values
+    information_gains = {}
+    # highest information gain of the given attributes
+    highest_info_gain = 0
+    # iterating through each attribute provided
+    for key in attributes.keys():
+        # info gain for specific attribute value
+        info_gain_sum = 0
+        # split the example by attribute value
+        sub_examples = attribute_split(examples, key, attributes)
+        # iterating through every row (corresponding to an attribute value) of sub_examples to get contribution to gain
+        for row in sub_examples:
+            info_gain_sum = info_gain_sum + float(len(sub_examples[row])) / len(examples) * majority_error_calc(
+                sub_examples[row])
+        # Calculating the total information gain
+        information_gains[key] = set_me - info_gain_sum
+        if information_gains[key] >= highest_info_gain:
+            highest_info_gain_key = key
+            highest_info_gain = information_gains[key]
+    return highest_info_gain_key, highest_info_gain
+
+
+# Function returns the highest information gain using entropy method. Using all the given examples and all the given
 #   attributes to determine which attribute splits the best
 def highest_info_gain_entropy(examples, attributes):
     # entropy of the set of examples
@@ -222,20 +314,3 @@ def test_data_error_calc(decision_tree, examples):
             error_total += 1
     average_error = float(error_total)/len(examples)
     return average_error
-
-
-terms = []
-with open("car/tennis.csv", 'r') as f:
-    for line in f:
-        terms.append(line.strip().split(','))
-
-full_attributes = get_attributes(terms)
-remain_attributes = full_attributes.copy()
-dec_tree = id3(terms, terms, full_attributes, remain_attributes, 1)
-#print(dec_tree)
-decision_tree_prediction = decision_tree_predictor(dec_tree, ['sunny', 'hot', 'high', 'weak'])
-test_data_no_label = [z[:-1] for z in terms]
-test_prediction = decision_tree_batch_predictor(dec_tree, test_data_no_label)
-#print(test_prediction)
-print(test_data_error_calc(dec_tree, terms))
-

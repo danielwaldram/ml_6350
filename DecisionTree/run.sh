@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python id3alg.py
+python cs6350_p2b.py
