@@ -284,7 +284,7 @@ def attribute_split(examples, key, attributes):
 # This function will take in a decision_tree and an example without a label.
 #   the tree then makes a prediction on what the label of the example is
 def decision_tree_predictor(decision_tree, example):
-    if decision_tree.has_key('attribute'):
+    if 'attribute' in decision_tree:
         # determine what attribute is split by this tree
         attribute = decision_tree["attribute"]
         # the attribute number should correspond to the index number in the example
