@@ -1,4 +1,5 @@
 from id3alg import *
+import pandas as pd
 
 # Reading in the set of training examples
 train = []
@@ -25,8 +26,10 @@ entropy_train_error = []
 gini_test_error = []
 me_test_error = []
 entropy_test_error = []
+tree_size = []
 
 for i in range(1, 7):
+    tree_size.append(i)
     # making decision tree of size i (1-6) for all gain methods
     dec_tree_entropy = id3(train, train, full_attributes, remain_attributes, i, "entropy")
     dec_tree_me = id3(train, train, full_attributes, remain_attributes, i, "me")
@@ -40,18 +43,8 @@ for i in range(1, 7):
     entropy_test_error.append(test_data_error_calc(dec_tree_entropy, test))
     me_test_error.append(test_data_error_calc(dec_tree_me, test))
     gini_test_error.append(test_data_error_calc(dec_tree_gini, test))
-
-print("Entropy Training Errors:")
-print(entropy_train_error)
-print("Majority Error Training Errors:")
-print(me_train_error)
-print("Gini Index Training Errors:")
-print(gini_train_error)
-
-print("Entropy Test Errors:")
-print(entropy_test_error)
-print("Majority Error Test Errors:")
-print(me_test_error)
-print("Gini Index Test Errors:")
-print(gini_test_error)
+print("-----PROBLEM 2B--------")
+data = {'Entropy train': entropy_train_error, 'Entropy test': entropy_test_error, 'ME train': me_train_error, 'ME test': me_test_error, 'Gini train': gini_train_error, 'Gini test': gini_test_error}
+df = pd.DataFrame(data, index=tree_size)
+print(df)
 
