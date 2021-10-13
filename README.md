@@ -1,6 +1,7 @@
 # ml_6350
 This is a machine learning library developed by Daniel Waldram for CS 5350/6350 in University of Utah.
 DecisionTree folder
+
 	To train a decision tree use the id3 function in either id3alg.py or id3alg_p3.py in the 
 	id3 inputs:
  	- prev_node_examples - the original examples list
