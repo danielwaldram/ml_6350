@@ -21,8 +21,9 @@ DecisionTree
   	- decision_tree - decision tree output of id3
   	- examples - examples from which you want training error
 
-EnsembleLearning
-    ADABOOST (adaboost.py)
+DecisionTree
+
+	ADABOOST (adaboost.py)
     adaboost - To run the adaboost function, you need to specify the number of models that will be used with adaboost as the first argument. The second argument is the list of training examples passed as a 2D list. This function returns a dictionary that holds "trees" and "votes" corresponding to those trees. 
     adaboost_get_predictions_error - To get the prediction error for adaboost, pass the dictionary recieved from adaboost as the first argument and examples for the second argument.
     classifier_weight - Does not need to be called by itself but gets called by the adaboost function. Updates the weight vector and determines the vote for a given tree.
