@@ -21,7 +21,7 @@ DecisionTree
   	- decision_tree - decision tree output of id3
   	- examples - examples from which you want training error
 
-DecisionTree
+EnsembleLearning
 
 	ADABOOST (adaboost.py)
     adaboost - To run the adaboost function, you need to specify the number of models that will be used with adaboost as the first argument. The second argument is the list of training examples passed as a 2D list. This function returns a dictionary that holds "trees" and "votes" corresponding to those trees. 
@@ -32,12 +32,14 @@ DecisionTree
     bag_get_predictions_error - This function takes in examples, predictions from the process_trees function, and the votes associated with those predictions. The function returns the average error
 
 LinearRegression
-    linear_regression (linear_regression.py) - this function takes in the example x_values, y_values, an initial weight vector and an r value. The function returns a weight vector and a vector that gives the cost for each epoch
+
+	linear_regression (linear_regression.py) - this function takes in the example x_values, y_values, an initial weight vector and an r value. The function returns a weight vector and a vector that gives the cost for each epoch
     cost_function - This function takes in x_values, y_values, and a weight_vec. It returns the cost given those inputs
     stochastic_grad_descent (stochastic_grad_descent.py) - This function has the same inputs and outputs as the linear regression function but performs stochastic gradient descent
 
 Perceptron (perceptron.py)
-      prediction - takes in an example and a weight vector and returns a prediction as a 1 or -1
+
+	prediction - takes in an example and a weight vector and returns a prediction as a 1 or -1
       voted_prediction - takes in an example and a dictionary of weight vectors and their associated votes and returns a prediction
       average_error - takes in examples and weight vector and returns average error. Calls prediction function
       average_error_voted - takes in examples and weight dictionary and returns average error. Calls voted_prediction function
