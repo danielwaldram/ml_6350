@@ -1,8 +1,9 @@
 # ml_6350
 This is a machine learning library developed by Daniel Waldram for CS 5350/6350 in University of Utah.
 
-To see instructions for assignment 2, look in the README in the Ensemble Learning folder.
-To see instructions for assignment 3, look in the README in the Perceptron folder.
+For assignment 2, run ./run_assignment_2.sh
+Look at the README in the Ensemble Learning folder for additional details.
+For assignment 3, run ./run_assignment_3.sh
 
 
 DecisionTree
