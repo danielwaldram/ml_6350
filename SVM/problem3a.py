@@ -9,20 +9,15 @@ train = []
 with open("bank-note/train.csv", 'r') as f:
     for line in f:
         train.append(line.strip().split(','))
-# columns = train[0]
-print("Train: ", train[0])
 
 # converting training examples to float
 train_str_to_flt = example_numeric_wo_bias(train)
-print("Train float: ", train_str_to_flt[0])
 
 # Reading in the set of test examples
 test = []
 with open("bank-note/test.csv", 'r') as f:
     for line in f:
         test.append(line.strip().split(','))
-# columns = train[0]
-#print("Test: ", test[0])
 test_str_to_flt = example_numeric(test)
 
 # initializing alpha parameters to zero

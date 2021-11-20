@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd Perceptron
+cd SVM
 printf "Problem 2a & b\n"
 python3 problem2_ab.py
 printf "Problem 3a\n"

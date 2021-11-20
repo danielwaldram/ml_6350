@@ -31,7 +31,6 @@ alpha_np = np.array(initial_params)
 examples_np = np.array(train_str_to_flt)
 y_np = np.array(examples_np[:, -1])
 x_np = np.array(examples_np[:, :-1])
-print(y_np.shape)
 yyt = np.outer(y_np, y_np.T)
 
 # assembling gaussian kernel
