@@ -1,10 +1,22 @@
 # ml_6350
 This is a machine learning library developed by Daniel Waldram for CS 5350/6350 in University of Utah.
 
+For assignment 4 run ./run_assignment_4.sh
 For assignment 2, run ./run_assignment_2.sh
 Look at the README in the Ensemble Learning folder for additional details.
 For assignment 3, run ./run_assignment_3.sh
 
+SVM
+    To run the primal SVM algorithm use the primal_svm function in the SVM.py script which take the following inputs.
+    -  examples - must be floats with labels being 1 or -1
+    - epochs - number of desired epochs
+    - rate0 - the initial rate fro the algorithm
+    - rate_mode - either "schedule0" or "schedule1" determines how the rate decays
+    - C - determines value of C for SVM
+    - a - parameter for schedule0
+    
+    To run the dual SVM algorithm use the scipy minimize function with the optimization function in the dual_svm.py. The necessary bounds and constraints for the dual SVM are shown in problem3a.py
+    To run the dual SVM with a gaussian kernel use the same scipy minimize function with the gaussian_optimization_function in gaussian_kerrnel.py. The bounds and constraints to be input into the optimization are shown in problem3b.py.
 
 DecisionTree
 
