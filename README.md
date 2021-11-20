@@ -1,10 +1,10 @@
 # ml_6350
 This is a machine learning library developed by Daniel Waldram for CS 5350/6350 in University of Utah.
 
-For assignment 4 run ./run_assignment_4.sh
-For assignment 2, run ./run_assignment_2.sh
-Look at the README in the Ensemble Learning folder for additional details.
-For assignment 3, run ./run_assignment_3.sh
+For assignment 4 run ./run_assignment_4.sh\
+For assignment 2, run ./run_assignment_2.sh\
+Look at the README in the Ensemble Learning folder for additional details.\
+For assignment 3, run ./run_assignment_3.sh\
 
 SVM
     To run the primal SVM algorithm use the primal_svm function in the SVM.py script which take the following inputs.
