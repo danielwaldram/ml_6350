@@ -1,10 +1,16 @@
 # ml_6350
 This is a machine learning library developed by Daniel Waldram for CS 5350/6350 in University of Utah.
 
+For assignment 5 run ./run_assignment_5.sh\
 For assignment 4 run ./run_assignment_4.sh\
 For assignment 2, run ./run_assignment_2.sh\
 Look at the README in the Ensemble Learning folder for additional details.\
 For assignment 3, run ./run_assignment_3.sh\
+
+Neural Networks
+    To run the primal SVM algorithm use the neural_net_vectorized.py file. There are two main functions in this file that a user must interact with.\
+        - The initialize_network function takes in the hidden layer widht, length of the input examples, and the number of desired hidden layers. This function outputs a neural network which is represented as a list of dictionaries. Each entry in the list is another layer of the network and contains current weight values, gradient values, and the prediction of the network at that layer.\
+        - After creating a network, a user can call the stochastic_gradient_descent_nn function, which takes in a set of examples, number of epochs, a learning rate, and a parameter a for tuning the learning rate in addition to the initialized neural net. This function returns a cost vector that shows the cost for every epoch. It also returns the trained neural network that can then be used to make predictions
 
 SVM
     To run the primal SVM algorithm use the primal_svm function in the SVM.py script which take the following inputs.\
